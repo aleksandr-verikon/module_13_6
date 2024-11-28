@@ -70,4 +70,3 @@ async def send_calories(message, state):
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates = True)
 
-# 'Для мужчин: (10 х вес в кг) + (6,25 х рост в см) – (5 х возраст в г) + 5.'
