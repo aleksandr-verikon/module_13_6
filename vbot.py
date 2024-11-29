@@ -21,7 +21,7 @@ button1 = KeyboardButton(text = 'Рассчитать')
 button2 = KeyboardButton(text = 'Информация')
 kb.add(button1, button2)
 
-dvach =  InlineKeyboardMarkup()
+dvach =  InlineKeyboardMarkup(resize_keyboard=True)
 button_dvach1 = InlineKeyboardButton('Рассчитать норму калорий', callback_data='calories')
 button_dvach2 = InlineKeyboardButton('Формулы расчёта', callback_data='formulas')
 dvach.add(button_dvach1, button_dvach2)
@@ -32,13 +32,13 @@ async def main_menu(message):
 
 @dp.callback_query_handler(text='formulas')
 async def get_formulas(call):
-    await call.message.answer('для мужчин: 10 х вес (кг) + 6,25 x рост (см) – 5 х возраст (г) + 5;'
-                              'для женщин: 10 x вес (кг) + 6,25 x рост (см) – 5 x возраст (г) – 161.')
+    await call.message.answer('10 х вес (кг) + 6,25 x рост (см) – 5 х возраст (г) + 5')
+
     await call.answer()
 
 @dp.message_handler(commands = ['start'])
 async def start(message):
-    await message.answer('Привет!', reply_markup = kb)
+    await message.answer('Привет! Я бот помогающий твоему здоровью.', reply_markup = kb)
 
 
 @dp.callback_query_handler(text = ['calories'])
@@ -67,6 +67,9 @@ async def send_calories(message, state):
     formula = (int(data['growth']) * 6.25) + (int(data['weight']) * 10) - (int(data['age']) * 5)
     await message.answer(f"Ваша норма каллорий: {formula}")
 
+@dp.message_handler()
+async def all_message(message):
+    await message.answer('Введите команду /start, чтобы начать общение.')
+
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates = True)
-
